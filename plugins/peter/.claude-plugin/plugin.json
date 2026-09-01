@@ -1,0 +1,10 @@
+{
+  "name": "peter",
+  "description": "Peter's personal skills.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Peter Brown",
+    "url": "https://ptb.io"
+  },
+  "repository": "https://github.com/flippyhead/ai-system"
+}
