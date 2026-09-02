@@ -32,16 +32,13 @@ Don't also enable the same skills as claude.ai account skills — the names coll
 
 ## Add a skill
 
-```bash
-mkdir -p plugins/peter/skills/<slug>
-$EDITOR plugins/peter/skills/<slug>/SKILL.md   # frontmatter: name, description
-git add -A && git commit -m "Add <slug>" && git push
-```
-
-Then, to pick it up:
+Say "skillify this" / "add a skill that …" — the `add-skill` skill does the rest.
+By hand: new dir under `plugins/peter/skills/<slug>/SKILL.md`, a row in
+`RESOLVER.md`, **bump `version` in `plugins/peter/.claude-plugin/plugin.json`**
+(neither Claude Code nor Cowork re-fetches without it), then:
 
 ```bash
-claude plugin marketplace update pai   # Claude Code
+git add -A && git commit -m "Add <slug>" && git push && claude plugin marketplace update pai && claude plugin update peter@pai
 ```
 
 Cowork picks it up on its own.
