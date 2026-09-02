@@ -32,6 +32,11 @@ What I'd actually type → which skill should take it.
 | "re-check my model choices" | `model-radar` ⚠️ |
 | "import my ChatGPT memories" | `import-memory` ⚠️ |
 | *(pastes a memory export)* "add these" | `import-memory` ⚠️ |
+| "skillify this" | `add-skill` |
+| "make this a skill" | `add-skill` |
+| "add a skill that…" | `add-skill` |
+| "save this as a skill" | `add-skill` |
+| "change my file-it skill so…" | `add-skill` |
 
 ⚠️ = the phrase is real, but the skill's own `description:` doesn't contain
 anything like it, so the router won't match. See the audit below.
