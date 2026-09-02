@@ -22,14 +22,23 @@ helper. Run `gh auth setup-git` once if background marketplace refreshes fail.
 
 ## Cowork
 
-Cowork reads this repo directly as a personal plugin marketplace. One-time:
-**Customize → Plugins → Personal plugins "+" → Add marketplace →** `flippyhead/pai`,
-then install `peter`. Cowork clones on the host with system git, so private-repo
-auth comes from the same credential helper `gh auth` set up. Click **Update** on
-the marketplace to pull new commits.
+Cowork cannot read this repo while it is private: personal marketplaces are
+fetched server-side by claude.ai with no GitHub credential (fails with
+"GitHub API rate limit exceeded" / open bug anthropics/claude-code#28125).
+Private-repo sync exists only for Team/Enterprise org marketplaces.
 
-Do not also enable the same skills as claude.ai account skills — the names
-collide. The plugin is the only copy.
+So Cowork gets the whole plugin as one zip upload:
+
+```bash
+(cd plugins && zip -r /tmp/peter-plugin.zip peter -x '*.DS_Store')
+```
+
+Then **Customize → Plugins → upload option → pick the zip**. Re-upload after
+changes. Don't also enable the same skills as claude.ai account skills — the
+names collide.
+
+If the repo ever goes public, replace the upload with
+**Customize → Plugins → Add marketplace → `flippyhead/pai`**.
 
 ## Add a skill
 
@@ -45,4 +54,4 @@ Then, to pick it up:
 claude plugin marketplace update pai   # Claude Code
 ```
 
-and **Customize → Plugins → pai → Update** in Cowork.
+and re-upload the zip in Cowork.
