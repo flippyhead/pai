@@ -37,6 +37,10 @@ What I'd actually type → which skill should take it.
 | "add a skill that…" | `add-skill` |
 | "save this as a skill" | `add-skill` |
 | "change my file-it skill so…" | `add-skill` |
+| "ship this PR" | `pr-ship` |
+| "land PR 42" | `pr-ship` |
+| "get this PR merged" | `pr-ship` |
+| "babysit the PR until CI is green" | `pr-ship` |
 
 ⚠️ = the phrase is real, but the skill's own `description:` doesn't contain
 anything like it, so the router won't match. See the audit below.
