@@ -44,6 +44,9 @@ What I'd actually type → which skill should take it.
 | "get me a Lordicon for X" | `lordicon-grab` |
 | "find an animated icon for the upload button" | `lordicon-grab` |
 | "grab that lordicon" | `lordicon-grab` |
+| "update my branch" | `update-branch` |
+| "rebase this on main" | `update-branch` |
+| "bring this branch up to date" | `update-branch` |
 
 ⚠️ = the phrase is real, but the skill's own `description:` doesn't contain
 anything like it, so the router won't match. See the audit below.
