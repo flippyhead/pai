@@ -37,6 +37,7 @@ What I'd actually type → which skill should take it.
 | "add a skill that…" | `add-skill` |
 | "save this as a skill" | `add-skill` |
 | "change my file-it skill so…" | `add-skill` |
+| "ping the smoke test" | `zz-smoke-test` |
 
 ⚠️ = the phrase is real, but the skill's own `description:` doesn't contain
 anything like it, so the router won't match. See the audit below.
