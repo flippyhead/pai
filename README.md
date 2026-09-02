@@ -22,17 +22,14 @@ helper. Run `gh auth setup-git` once if background marketplace refreshes fail.
 
 ## Cowork
 
-Cowork does **not** read this repo, or `~/.claude/skills/`, or user settings.
-It loads only the skills enabled for the claude.ai account. So Cowork is fed by
-hand: edit here, then upload the changed skill via **Customize** in the Desktop
-sidebar (or claude.ai skills settings).
+Cowork reads this repo directly as a personal plugin marketplace. One-time:
+**Customize → Plugins → Personal plugins "+" → Add marketplace →** `flippyhead/ai-system`,
+then install `peter`. Cowork clones on the host with system git, so private-repo
+auth comes from the same credential helper `gh auth` set up. Click **Update** on
+the marketplace to pull new commits.
 
-Verify an upload round-tripped:
-
-```bash
-CLAUDE_CODE_SYNC_SKILLS=1 claude -p "ok"
-diff -r ~/.claude/skills/synced/*/<slug> plugins/peter/skills/<slug>
-```
+Do not also enable the same skills as claude.ai account skills — the names
+collide. The plugin is the only copy.
 
 ## Add a skill
 
@@ -48,4 +45,4 @@ Then, to pick it up:
 claude plugin marketplace update ai-system   # Claude Code
 ```
 
-and upload it via Customize if it needs to work in Cowork too.
+and **Customize → Plugins → ai-system → Update** in Cowork.
