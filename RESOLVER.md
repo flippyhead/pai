@@ -41,6 +41,9 @@ What I'd actually type → which skill should take it.
 | "land PR 42" | `pr-ship` |
 | "get this PR merged" | `pr-ship` |
 | "babysit the PR until CI is green" | `pr-ship` |
+| "get me a Lordicon for X" | `lordicon-grab` |
+| "find an animated icon for the upload button" | `lordicon-grab` |
+| "grab that lordicon" | `lordicon-grab` |
 
 ⚠️ = the phrase is real, but the skill's own `description:` doesn't contain
 anything like it, so the router won't match. See the audit below.
