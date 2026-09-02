@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "ai-system",
+  "name": "pai",
   "description": "Peter's personal AI system — skills, source of truth.",
   "owner": {
     "name": "Peter Brown",

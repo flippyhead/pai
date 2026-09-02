@@ -1,9 +1,9 @@
-# ai-system
+# pai
 
 Source of truth for Peter's personal skills. One marketplace, one plugin.
 
 ```
-.claude-plugin/marketplace.json   marketplace "ai-system"
+.claude-plugin/marketplace.json   marketplace "pai"
 plugins/peter/
   .claude-plugin/plugin.json      plugin "peter"
   skills/<slug>/SKILL.md          one dir per skill
@@ -13,8 +13,8 @@ RESOLVER.md                       trigger phrase -> skill
 ## Install (Claude Code)
 
 ```bash
-claude plugin marketplace add flippyhead/ai-system
-claude plugin install peter@ai-system
+claude plugin marketplace add flippyhead/pai
+claude plugin install peter@pai
 ```
 
 Private repo — clone auth comes from `gh auth login` via the git credential
@@ -23,7 +23,7 @@ helper. Run `gh auth setup-git` once if background marketplace refreshes fail.
 ## Cowork
 
 Cowork reads this repo directly as a personal plugin marketplace. One-time:
-**Customize → Plugins → Personal plugins "+" → Add marketplace →** `flippyhead/ai-system`,
+**Customize → Plugins → Personal plugins "+" → Add marketplace →** `flippyhead/pai`,
 then install `peter`. Cowork clones on the host with system git, so private-repo
 auth comes from the same credential helper `gh auth` set up. Click **Update** on
 the marketplace to pull new commits.
@@ -42,7 +42,7 @@ git add -A && git commit -m "Add <slug>" && git push
 Then, to pick it up:
 
 ```bash
-claude plugin marketplace update ai-system   # Claude Code
+claude plugin marketplace update pai   # Claude Code
 ```
 
-and **Customize → Plugins → ai-system → Update** in Cowork.
+and **Customize → Plugins → pai → Update** in Cowork.
