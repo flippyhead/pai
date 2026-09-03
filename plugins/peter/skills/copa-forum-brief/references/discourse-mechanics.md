@@ -19,6 +19,13 @@ Forum: `https://forum.cirruspilots.org` — Discourse, members-only. All reads g
 - `/t/<topic_id>.json` — deep read. `post_stream.posts[]` carries `username`, `name`, `trust_level`, `cooked` (HTML body), `like_count`. First post = the OP. More posts via `/t/<id>/posts.json?post_ids[]=...` batched.
 - `/u/<username>.json` — account `created_at` and `trust_level` for new-member detection (account < ~60 days or TL0–1 with few posts ⇒ treat as new).
 
+## Grounding endpoints
+
+- **Forum search** — `/search.json?q=<terms>`; Discourse search is keyword, not semantic, so run 2–4 phrasings per question (the poster's exact words, a `"quoted phrase"`, one with `order:likes`, one with `order:latest`). Results carry `topics[]` with `id`, `title`, `posts_count`, `created_at`. Then `/t/<id>.json` for the match; the first post plus the top-liked replies is enough, but read them **untruncated** — strip `cooked` to text and return the whole thing, not a 300-char slice. Same 1.3 s pacing; grounding fetches count against the ~25-request cap, so budget them (sweep ~12, deep-read ~6, grounding ~6).
+- **Commander** — `https://commander.copa.fyi`, logged in through the same Chrome profile (as p@ptb.io; verified 3 Sep 2026). It is a chat UI, not JSON: navigate there, click **Start New Conversation**, type the question, wait for the answer to finish streaming, then `get_page_text`. It searches Cirrus TechPubs, COPA articles, and live member-gated Discourse search, and cites sources — use the cited answer. Slow; one or two questions per run. Ask "what are people saying on the forums about X" to make the forum the primary source.
+- **Ask COPA U** — `https://answers.copa.fyi` (experts list at `/experts`). For training/CPPP questions and to see which SME has answered similar ones.
+- **`copa-member-feedback.db`** — see below; for "has this come up before" counts, not for drafting text.
+
 ## Controversy screen (cheap heuristics before deep-reading)
 
 Skip a topic when any of: category is Off Topic **and** reply velocity is high (>20 posts in 48h); title contains moderation/complaint/politics markers (ban, moderation, censorship, flag, "finest hour", political figures/party names); topic JSON shows `has_accepted_answer`-style resolution already; or the deep read surfaces flag/deleted-post gaps and people quoting each other to object. When in doubt, it's a "Passed on" line, not a candidate.
@@ -27,7 +34,9 @@ Skip a topic when any of: category is Off Topic **and** reply velocity is high (
 
 Dave St. Clair, Jim Grace, Rob Fulton, TJ Shembekar, John Covino, Kelly Nimmo-Guenther, Peter Brown, Doug Beary, Bill King, Mark van Niftrik. Erik Gundersen (President, forum username `erikgun`) posts constantly and does not count against saturation — he's the baseline, not the ceiling. Match by display `name` in post JSON, not just username; verify usernames on first encounter and note them in AI Brain so future runs stop guessing.
 
-Peter's own forum username: verify on first run via `/session/current.json` (returns the logged-in user) and record it in AI Brain.
+**Verified 3 Sep 2026 (first run):** Peter = `flippyhead` (user id 17785). Dave St. Clair = `dstclair`. Rob Fulton = `robfult`. Erik = `ErikGun`. Not board but frequent: `mwaddell` (Mark Waddell, posts the accident-report threads), `tlewis` (Tim Lewis), `Mark_Wolfgang`. Other board usernames still unverified — match by display `name` and add here when seen.
+
+Category 57 "AI Moderation Test (staff)" is Peter's own pilot fixture category: exclude it from every sweep.
 
 ## Related durable assets
 
