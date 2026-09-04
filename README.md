@@ -34,8 +34,10 @@ Don't also enable the same skills as claude.ai account skills — the names coll
 
 Say "skillify this" / "add a skill that …" — the `add-skill` skill does the rest.
 By hand: new dir under `plugins/peter/skills/<slug>/SKILL.md`, a row in
-`RESOLVER.md`, **bump `version` in `plugins/peter/.claude-plugin/plugin.json`**
-(neither Claude Code nor Cowork re-fetches without it), then:
+`RESOLVER.md`, **bump `version` in BOTH `plugins/peter/.claude-plugin/plugin.json`
+and the `peter` entry of `.claude-plugin/marketplace.json`** (Claude Code reads
+the first, the Cowork backend reads the second; miss either and that surface
+never re-fetches), then:
 
 ```bash
 git add -A && git commit -m "Add <slug>" && git push && claude plugin marketplace update pai && claude plugin update peter@pai
