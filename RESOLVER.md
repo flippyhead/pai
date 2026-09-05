@@ -44,6 +44,11 @@ What I'd actually type → which skill should take it.
 | "get me a Lordicon for X" | `lordicon-grab` |
 | "find an animated icon for the upload button" | `lordicon-grab` |
 | "grab that lordicon" | `lordicon-grab` |
+| "write it like me" | `my-writing-style` |
+| "in my voice" | `my-writing-style` |
+| "draft a reply to this for me" | `my-writing-style` |
+| "text Julia that…" | `my-writing-style` |
+| "does this sound like me?" | `my-writing-style` |
 | "update my branch" | `update-branch` |
 | "rebase this on main" | `update-branch` |
 | "bring this branch up to date" | `update-branch` |
