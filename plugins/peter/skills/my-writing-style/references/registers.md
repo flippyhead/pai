@@ -1,8 +1,10 @@
-# Registers — verbatim examples
+# Registers: verbatim examples
+
+Peter no longer uses em dashes, en dashes or double hyphens in anything he sends; people read them as AI-written. Where his original messages had a dash, these quotes use a period, comma, colon or parentheses instead.
 
 All quotes are Peter's own words from sent mail and texts. Names and companies have been removed; the wording is untouched.
 
-## Register 1 — quick email
+## Register 1: quick email
 
 Answer exactly the question. No greeting in a live thread. No sign-off, or the auto-signature.
 
@@ -28,9 +30,9 @@ Friction, stated plainly with no softening and no theater:
 
 Cold pitch, dismissed with a wink and a door left open:
 
-> I worked on this problem for many years. It's definitely a hard one! Your AI is misinformed, we sold our business — doing exactly this — some years ago to private equity (and made a killing!). That said, I would be interested in consulting with you about what you are building.
+> I worked on this problem for many years. It's definitely a hard one! Your AI is misinformed, we sold our business (doing exactly this) some years ago to private equity (and made a killing!). That said, I would be interested in consulting with you about what you are building.
 
-## Register 2 — substantive email
+## Register 2: substantive email
 
 ### Greetings
 "Hi [First]," for ongoing client threads. Bare "[First]," for vendors and colleagues. "Hey [First]!" or "Hey!" when warm.
@@ -38,16 +40,16 @@ Cold pitch, dismissed with a wink and a door left open:
 ### One-sentence frame
 - "Short update on what's live, since some of it changes what you'll see while you're checking quotes."
 - "Circling back on the two remaining K-1s from your June 5 note."
-- "Thanks for getting this over. I want to get moving — there are a few things to clean up first and then I can sign."
+- "Thanks for getting this over. I want to get moving. There are a few things to clean up first and then I can sign."
 - "Thanks for checking in. Your timing is perfect."
 
 ### Lead with the answer
 - "Good news on the numbers: nothing is missing. The two counts are counting different things."
-- "Done — the screen now reads "983 active customers of 1,148 synced", in both the customers list and the picker. It goes live on the next deploy."
-- "Confirmed — the customer sync is fixed and has run. You're at 983 customers in the generator, down from 12,086."
+- "Done. The screen now reads "983 active customers of 1,148 synced", in both the customers list and the picker. It goes live on the next deploy."
+- "Confirmed: the customer sync is fixed and has run. You're at 983 customers in the generator, down from 12,086."
 
-### Label-dash paragraphs
-- "Profile — fixed, live now. It's your name at the bottom of the sidebar."
+### Label paragraphs
+- "Profile: fixed, live now. It's your name at the bottom of the sidebar."
 - "Re-assigning: you're right, it didn't work. There's now a Change customer button under the customer name on any draft."
 - "Salesforce: sure, that's absolutely doable. Sharing the pricing engine with the public form is the valuable part and is feasible."
 - "The KOS answer was the big one. It unblocks the whole OEM list, and it's simpler than I'd feared."
@@ -56,14 +58,14 @@ Cold pitch, dismissed with a wink and a door left open:
 "Two worth knowing before you reconcile anything:" · "Four smaller ones:" · "Two questions, which I'll add to the sheet as well:" · "Three things I need from you:" · "Two worth a look:" · "Still open from before:" · "What I haven't done:"
 
 ### Reason in the same clause
-- "It re-copies the rates from the new customer, so any hand-adjusted rates on that quote get reset — deliberate, since carrying the old customer's discount onto a different one is what nobody catches until the quote is out the door."
+- "It re-copies the rates from the new customer, so any hand-adjusted rates on that quote get reset. That's deliberate, since carrying the old customer's discount onto a different one is what nobody catches until the quote is out the door."
 - "Approved quotes can't move; their pricing is frozen on purpose."
 - "It deliberately does not fill in on standard frames: auto-filling there was the pricing error in your first run back in July."
 
 ### Own the mistake, refuse to guess, be honest about partial work
-- "A correction: I told you in the sheet that Lexan was already in the system with a price. It isn't — I checked."
+- "A correction: I told you in the sheet that Lexan was already in the system with a price. It isn't. I checked."
 - "Fixed, and you were right that there was no way to do it."
-- "Leave them as they are, or tidy them? If tidy, the wording needs to come from you — I'm not going to invent part numbers."
+- "Leave them as they are, or tidy them? If tidy, the wording needs to come from you. I'm not going to invent part numbers."
 - "That's a real feature rather than a fix, and I didn't want to guess at it."
 - "To be straight with you, that's only half your ask… Queued, not done."
 
@@ -76,12 +78,12 @@ Cold pitch, dismissed with a wink and a door left open:
 ### Negotiate with numbers and an alternative
 > 1. Payment schedule. 50% before work starts is more than I'm comfortable with on an insurance job, particularly with the supplement still open. Can we do 20% to start, 40% at flooring, 40% on completion? I'm also happy to just tie the draws to the insurer's payments as they come in if that's simpler on your end.
 >
-> 2. A few blanks and one number. The payment table totals $49,453.08 but the rows add up to $49,853.08 — $400 off. Can you send a clean version with those filled in?
+> 2. A few blanks and one number. The payment table totals $49,453.08 but the rows add up to $49,853.08, so $400 off. Can you send a clean version with those filled in?
 
 ### Asks that can be answered in one line
 > 1. Is the $829 net of the current manufacturer rebate, or does that come off on top?
 > 2. What does an extended warranty run, and what does it cover? The house is a rental and I'm remote, so having your techs on the hook locally is worth something to me.
-> 3. What's your best 4.5 cu ft top-loader, and what does it cost delivered? If it's meaningfully less I'd consider it — no gasket to mold is worth something in a rental.
+> 3. What's your best 4.5 cu ft top-loader, and what does it cost delivered? If it's meaningfully less I'd consider it. No gasket to mold is worth something in a rental.
 
 ### Closers
 - "Would Tuesday work instead of Monday?"
@@ -95,7 +97,7 @@ Cold pitch, dismissed with a wink and a door left open:
 When asked whether he writes these himself:
 > Either way: I collaborate with AI to put them together. It reads the code and the sync logs with me and helps me write it up; the engineering judgment and what I tell you are mine.
 
-## Register 3 — iMessage to Julia
+## Register 3: iMessage to Julia
 
 Separate bubbles, not a composed message. When drafting, output each bubble on its own line.
 
@@ -124,7 +126,7 @@ Playful:
 - "Look how far out you are planning!!" · "You might never leave!"
 
 Mechanics:
-- Lowercase, "teh", "tho", "idk", "uhg", ".." — all normal. Don't polish them in; don't edit them out of his own text.
+- Lowercase, "teh", "tho", "idk", "uhg", "..": all normal. Don't polish them in; don't edit them out of his own text.
 - Rare casual profanity for real frustration ("Fuuuck" at a closed airport), never aimed at her.
 - No emoji. Reactions are tapbacks (Liked / Loved).
 - If it takes more than three bubbles to explain, suggest a call.
