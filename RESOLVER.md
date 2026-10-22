@@ -52,6 +52,11 @@ What I'd actually type → which skill should take it.
 | "update my branch" | `update-branch` |
 | "rebase this on main" | `update-branch` |
 | "bring this branch up to date" | `update-branch` |
+| "watch my PRs" | `pr-watch` |
+| "keep checking my pull requests" | `pr-watch` |
+| "auto-review my PRs until I say stop" | `pr-watch` |
+| "stop watching PRs" | `pr-watch` |
+| "PR watch status" | `pr-watch` |
 
 ⚠️ = the phrase is real, but the skill's own `description:` doesn't contain
 anything like it, so the router won't match. See the audit below.
