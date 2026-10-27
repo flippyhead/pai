@@ -8,6 +8,7 @@ plugins/peter/
   .claude-plugin/plugin.json      plugin "peter"
   skills/<slug>/SKILL.md          one dir per skill
 RESOLVER.md                       trigger phrase -> skill
+tools/dashboard/                  local "In flight" page: node tools/dashboard/server.ts
 ```
 
 ## Install (Claude Code)
