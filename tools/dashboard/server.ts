@@ -72,7 +72,7 @@ export function loadSessions(dir = SESSIONS_DIR, now = Date.now()): { sessions: 
     }
     if (d.isArchived) continue;
     const wrap = d.turnWrapUp ?? {};
-    const interrupted = d.interruptedAwaitingPerson;
+    const str = (v: unknown) => (typeof v === "string" ? v : undefined);
     const lastActivity = time(d.lastActivityAt);
     sessions.push({
       id: d.sessionId,
@@ -82,9 +82,11 @@ export function loadSessions(dir = SESSIONS_DIR, now = Date.now()): { sessions: 
       // Mid-turn: the latest user message is newer than the last turn end. Older sessions lack
       // lastTurnEdgeAt, and a turn silent for 30 min was most likely killed, not still working.
       running: !!d.lastTurnEdgeAt && time(d.latestUserFrameAt) > time(d.lastTurnEdgeAt) && now - lastActivity < 30 * 60_000,
-      needsUser: wrap.needsUser ?? (interrupted ? "Interrupted, waiting for you" : undefined),
-      recap: wrap.description,
-      prs: (Array.isArray(d.prs) ? d.prs : []).map((p: any) => ({ repo: p.repo, number: p.prNumber, url: p.url, state: p.state })),
+      needsUser: str(wrap.needsUser) ?? (d.interruptedAwaitingPerson ? "Interrupted, waiting for you" : undefined),
+      recap: str(wrap.description),
+      prs: (Array.isArray(d.prs) ? d.prs : [])
+        .filter((p: any) => typeof p?.repo === "string" && typeof p?.prNumber === "number")
+        .map((p: any) => ({ repo: p.repo, number: p.prNumber, url: String(p.url ?? ""), state: String(p.state ?? "") })),
     });
   }
   if (malformed) warnings.push(`${malformed} session file(s) had an unexpected shape and were skipped. The app's format may have changed.`);
@@ -140,7 +142,7 @@ function prNeeds(pr: Pr): string | undefined {
   if (pr.reviewRequested) return "Your review is requested";
   if (pr.ci === "FAILURE" || pr.ci === "ERROR") return "CI failing";
   if (pr.review === "CHANGES_REQUESTED") return "Changes requested";
-  if (pr.review === "APPROVED" && !pr.isDraft) return "Approved, ready to merge";
+  if (pr.review === "APPROVED" && !pr.isDraft && (pr.ci === undefined || pr.ci === "SUCCESS")) return "Approved, ready to merge";
 }
 
 function classify(session: Session | undefined, prs: Pr[], now: number): Pick<Row, "bucket" | "reason" | "stale" | "age"> {
@@ -232,10 +234,16 @@ ${warnings.map((w) => `<div class="warn">${esc(w)}</div>`).join("")}${sections}<
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   createServer(async (req, res) => {
     if (req.url !== "/") return res.writeHead(404).end();
-    const now = Date.now();
-    const s = loadSessions();
-    const p = await loadPrs(now);
-    res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
-    res.end(render(buildRows(s.sessions, p.prs, now), [...s.warnings, ...p.warnings], now));
+    try {
+      const now = Date.now();
+      const s = loadSessions();
+      const p = await loadPrs(now);
+      res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+      res.end(render(buildRows(s.sessions, p.prs, now), [...s.warnings, ...p.warnings], now));
+    } catch (e) {
+      // One bad record must not take the long-running server down.
+      console.error(e);
+      res.writeHead(500, { "content-type": "text/plain" }).end(`Dashboard error: ${(e as Error).message}`);
+    }
   }).listen(PORT, "127.0.0.1", () => console.log(`In flight: http://localhost:${PORT}`));
 }

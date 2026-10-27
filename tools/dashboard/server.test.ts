@@ -20,7 +20,7 @@ test("buckets sessions and PRs", () => {
       session({ id: "d", prs: [{ repo: "o/r", number: 2, url: "u", state: "MERGED" }], lastActivity: now - 30 * DAY }),
       session({ id: "e", lastActivity: now - 10 * DAY }),
     ],
-    [pr({ number: 1, ci: "FAILURE" }), pr({ number: 3, reviewRequested: true }), pr({ number: 4, isDraft: true })],
+    [pr({ number: 1, ci: "FAILURE" }), pr({ number: 3, reviewRequested: true }), pr({ number: 4, isDraft: true }), pr({ number: 5, review: "APPROVED", ci: "PENDING" }), pr({ number: 6, review: "APPROVED", ci: "SUCCESS" })],
     now,
   );
   const by = (id: string) => rows.find((r) => r.session?.id === id || (!r.session && r.prs[0].number === Number(id)))!;
@@ -31,7 +31,9 @@ test("buckets sessions and PRs", () => {
   assert.deepEqual([by("e").bucket, by("e").stale], ["idle", true]);
   assert.deepEqual([by("3").bucket, by("3").reason], ["needs", "Your review is requested"]);
   assert.equal(by("4").bucket, "idle");
-  assert.equal(rows.length, 7); // PR #1 joins session c instead of getting its own row
+  assert.deepEqual([by("5").bucket, by("5").reason], ["idle", "CI running"]);
+  assert.deepEqual([by("6").bucket, by("6").reason], ["needs", "Approved, ready to merge"]);
+  assert.equal(rows.length, 9); // PR #1 joins session c instead of getting its own row
 });
 
 test("reads session files, skips archived and malformed ones", () => {
@@ -43,8 +45,12 @@ test("reads session files, skips archived and malformed ones", () => {
   w("local_3.json", { nope: true });
   w("local_4.json", { sessionId: "local_4", title: "Pre-field", lastActivityAt: now, latestUserFrameAt: now });
   w("local_5.json", { sessionId: "local_5", title: "Killed", lastActivityAt: now - DAY, latestUserFrameAt: now - DAY, lastTurnEdgeAt: now - 2 * DAY });
+  w("local_6.json", { sessionId: "local_6", title: "Bad nested", prs: [null, { repo: 1 }], turnWrapUp: { needsUser: 42 } });
   const { sessions, warnings } = loadSessions(dir, now);
-  assert.equal(sessions.length, 3);
+  assert.equal(sessions.length, 4);
+  const bad = sessions.find((s) => s.id === "local_6")!;
+  assert.deepEqual([bad.prs, bad.needsUser], [[], undefined]);
+  assert.doesNotThrow(() => render(buildRows(sessions, [], now), warnings, now));
   const live = sessions.find((s) => s.id === "local_1")!;
   assert.deepEqual([live.project, live.running, live.needsUser, live.prs[0].number], ["copa.fyi", true, "Q?", 5]);
   assert.ok(sessions.filter((s) => s.id !== "local_1").every((s) => !s.running));
