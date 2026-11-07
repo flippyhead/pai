@@ -49,6 +49,8 @@ What I'd actually type → which skill should take it.
 | "draft a reply to this for me" | `my-writing-style` |
 | "text Julia that…" | `my-writing-style` |
 | "does this sound like me?" | `my-writing-style` |
+| "write the board update" | `my-writing-style` |
+| "reply in the board thread" | `my-writing-style` |
 | "update my branch" | `update-branch` |
 | "rebase this on main" | `update-branch` |
 | "bring this branch up to date" | `update-branch` |

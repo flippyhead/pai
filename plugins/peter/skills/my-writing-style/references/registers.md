@@ -130,3 +130,28 @@ Mechanics:
 - Rare casual profanity for real frustration ("Fuuuck" at a closed airport), never aimed at her.
 - No emoji. Reactions are tapbacks (Liked / Loved).
 - If it takes more than three bubbles to explain, suggest a call.
+
+## Register 4: board update (Teams)
+
+Set by Peter on 6 Nov 2026, after a first draft ran 600 words of numbered paragraphs: "no one wants to read these long detailed AI written things". The shape below is the one he approved; the content is a placeholder. "TL;DR" and "Details" are plain lines, not headers, and nothing is bold.
+
+> @Name @Name @Name
+> Update on [topic], following [who asked, when].
+> TL;DR
+> - [What happened, with the one number that matters.]
+> - [Where it stands now.]
+> - [What's next, and who owns it.]
+> - [What the board will need to decide, and when.]
+> Details
+> What we found
+> - 19 Oct: [one fact, one sentence].
+> What we've done
+> - 21 Oct: [action]. [Its effect, if not obvious.]
+> In progress
+> - [Owner]: [what, by when].
+> Open for the board
+> - [A question the board can answer in one line?]
+> Happy to walk anyone through the logs.
+
+Owning a mistake, in one line each, then move on:
+- "On 21 Oct I told you nothing like that was happening. I was wrong."
