@@ -1,5 +1,7 @@
 # `/pr-ship` skill — design
 
+> **2026-11-09:** Reviewer switched from Qodo to Codex (ChatGPT Codex Connector). The Qodo-specific settle mechanics below are historical; SKILL.md has the current check (a `chatgpt-codex-connector[bot]` PR review whose `commit_id` == HEAD).
+
 ## Problem
 
 Three skills today cover the tail end of a PR's life:

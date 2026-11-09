@@ -1,12 +1,12 @@
 ---
 name: pr-ship
-description: Use when an existing PR needs to land — auto-loops wait/fix/push until qodo and CI are clean, then squash-merges and cleans up the branch + worktree. Replaces fix-pr-reviews and fix-pr-in-worktree.
+description: Use when an existing PR needs to land — auto-loops wait/fix/push until Codex review and CI are clean, then squash-merges and cleans up the branch + worktree. Replaces fix-pr-reviews and fix-pr-in-worktree.
 argument-hint: "[pr-number] [--confirm-merge]"
 ---
 
 # Ship a PR
 
-Take an existing GitHub PR from "qodo is reviewing" all the way to squash-merged + cleaned up. **Single invocation runs an internal loop** — do not wrap with `/loop`. The loop polls qodo and CI checks, fixes valid feedback, pushes, repeats until clean, then squash-merges and cleans up.
+Take an existing GitHub PR from "Codex is reviewing" all the way to squash-merged + cleaned up. **Single invocation runs an internal loop** — do not wrap with `/loop`. The loop polls Codex review and CI checks, fixes valid feedback, pushes, repeats until clean, then squash-merges and cleans up.
 
 **REQUIRED BACKGROUND:** Follow `superpowers:receiving-code-review` principles when evaluating feedback — verify before implementing, push back on incorrect suggestions with reasoning, no performative agreement.
 
@@ -99,46 +99,26 @@ Poll every 30s. Settled when:
    # 0 = settled
    ```
 
-2. **Qodo's review reflects current HEAD SHA.** Combine two signals (OR — either alone is sufficient):
-
-   **How qodo posts review feedback (read this before writing any poll):** on each push, qodo ALWAYS edits the existing "Code Review by Qodo" issue comment in place — same comment `id`, body replaced with the new findings, `updated_at` advances. It SOMETIMES also posts a new short pointer comment whose body starts with `**[Persistent review](<URL>)** updated to latest commit https://github.com/<owner>/<repo>/commit/<HEAD_SHA>`. The pointer is observed inconsistently — it appears on some pushes (first reviews, certain repo configs) but not others, even when qodo has fully re-analyzed and edited the Code Review comment. Do NOT rely on the pointer's presence as the sole signal. The in-place `updated_at` advance is the reliable one — present on every push.
-
-   **Canonical signal — `updated_at` of the Code Review comment is past the HEAD commit's authored time:**
-   ```bash
-   HEAD_DATE=$(git -C "$WORK_DIR" log -1 --format=%cI HEAD)
-   gh api "repos/{owner}/{repo}/issues/$PR/comments" --jq '
-     [.[] | select(.user.login=="qodo-code-review[bot]")
-          | select(.body | startswith("<h3>Code Review by Qodo</h3>") or
-                          (.body | startswith("\n<h3>Code Review by Qodo</h3>")))
-          | select(.updated_at > "'"$HEAD_DATE"'")] | length
-   '
-   # ≥1 = settled
-   ```
-   Works on every iteration — qodo always edits this comment in place after re-analyzing. Use this as the primary settle check.
-
-   **Optional fast-path — pointer comment names current HEAD SHA:**
+2. **Codex has finished reviewing current HEAD SHA.** Codex (ChatGPT Codex Connector, `chatgpt-codex-connector[bot]`) keeps ONE "Codex Review Summary" issue comment per PR and edits it in place. Its body carries a hidden JSON marker `<!-- codex-review-state:v1 {...} -->` with `code_review.commit_sha` and `code_review.status` (`running` while analyzing). Findings, when any, arrive as a separate PR review with inline comments; with no findings Codex posts nothing else and reacts 👍. So never wait on a PR review — wait on the marker:
    ```bash
    HEAD_SHA=$(git -C "$WORK_DIR" rev-parse HEAD)
    gh api "repos/{owner}/{repo}/issues/$PR/comments" --jq '
-     [.[] | select(.user.login=="qodo-code-review[bot]")
-          | select(.body | startswith("**[Persistent review]"))
-          | select(.body | contains("'"$HEAD_SHA"'"))] | length
+     [.[] | select(.user.login=="chatgpt-codex-connector[bot]")
+          | select(.body | contains("codex-review-state:v1"))
+          | (.body | capture("codex-review-state:v1 (?<j>\\{.*?\\}) -->").j | fromjson).code_review
+          | select(.commit_sha=="'"$HEAD_SHA"'" and .status!="running")] | length
    '
    # ≥1 = settled
    ```
-   When this fires, you can skip the `updated_at` check — but **never block on it**. Its absence is not a "qodo hasn't caught up" signal; qodo posts the pointer inconsistently. If you wait for it exclusively after the in-place edit has already happened, the loop hangs indefinitely (this happened on PR #148, iteration 2 — qodo edited Code Review with `🐞 Bugs (0)` but never posted a pointer).
-
-   > **Don't:** write your own poll that fetches qodo's comments, sorts by `created_at`, takes the latest, and greps for `Bugs (N)` or other findings-shaped patterns. Qodo does NOT post a new analysis comment per push — it edits the existing Code Review comment in place. A "latest comment + grep for findings" loop will wait forever. Use the canonical `updated_at`-based check above.
-   >
-   > **Also don't:** make the pointer check `AND`-required with anything. It must be `OR` only (or omitted) — see PR #148, iteration 2 for the failure mode.
+   Codex reviews fire on: PR opened for review, draft marked ready, or an `@codex review` comment. Drafts are skipped. Automatic review is enabled per repo at https://chatgpt.com/settings/code-review; on a repo without it, nothing fires on its own — use the nudge below on the first iteration.
 
 3. **≥60s since last check completed** — gives bots time to post.
 
-**Status updates while waiting** (every 2–3 min): `Waiting for checks... 3/7 complete | qodo: caught up ✓ | 4 min elapsed`.
+**Status updates while waiting** (every 2–3 min): `Waiting for checks... 3/7 complete | codex: reviewed HEAD ✓ | 4 min elapsed`.
 
-**Fallback nudge:** if 3 min pass after our latest push with qodo signal still false, post `/review` as an issue comment to retrigger. Once per push.
+**Fallback nudge:** if 3 min pass after our latest push with no Codex review of HEAD, post `@codex review` as an issue comment to trigger it. Once per push.
 ```bash
-gh api "repos/{owner}/{repo}/issues/$PR/comments" -f body="/review"
+gh api "repos/{owner}/{repo}/issues/$PR/comments" -f body="@codex review"
 ```
 
 **Timeout:** 15 min per settle phase. On timeout: print `Settle timeout — proceeding with current state`, continue to 2b. Don't bail — there may still be feedback to fix.
@@ -148,14 +128,14 @@ gh api "repos/{owner}/{repo}/issues/$PR/comments" -f body="/review"
 ```bash
 gh api "repos/{owner}/{repo}/pulls/$PR/comments"     # 1. review threads
 gh api "repos/{owner}/{repo}/pulls/$PR/reviews"      # 2. reviews
-gh api "repos/{owner}/{repo}/issues/$PR/comments"    # 3. issue comments (qodo)
+gh api "repos/{owner}/{repo}/issues/$PR/comments"    # 3. issue comments
 gh pr checks "$PR" --json name,state,conclusion      # 4. check runs
 gh pr view "$PR" --json mergeable,mergeStateStatus   # 5. mergeability
 ```
 
 For check failures, fetch logs: `gh run view "$RUN_ID" --log-failed`.
 
-**Reading the current qodo analysis:** the actual findings live in the "Code Review by Qodo" issue comment whose body starts with `<h3>Code Review by Qodo</h3>` (possibly with a leading newline). Qodo edits this comment in place per push, so its current `body` is always the latest analysis. Do NOT rely on `created_at` ordering — after qodo has updated, this comment is the OLDEST qodo comment on the PR, not the latest. Filter by body prefix, not recency.
+**Reading the current Codex analysis:** the marker's `has_any_findings` / `has_unresolved_findings` say whether there is anything to do. The findings themselves are the `chatgpt-codex-connector[bot]` PR review whose `commit_id` == HEAD (summary in `body`, inline items in `pulls/$PR/comments` with that review's `id` as `pull_request_review_id`). Ignore Codex reviews for older SHAs — addressed or superseded.
 
 Use `mcp__github__pull_request_read` if available (cleaner shape).
 
@@ -164,7 +144,7 @@ Use `mcp__github__pull_request_read` if available (cleaner shape).
 ALL must be true:
 - No FIX items in this iteration's categorized feedback.
 - All checks `success`/`skipped`/`neutral` (no `failure`/`cancelled`/`timed_out`/`action_required`/`startup_failure`/`stale`).
-- Qodo's persistent review reflects current HEAD SHA (same check as 2a).
+- Codex review exists for current HEAD SHA (same check as 2a).
 - `mergeable == "MERGEABLE"` AND `mergeStateStatus ∈ {"CLEAN", "UNSTABLE"}`.
 
 If true → jump to step 3 (merge). Else → 2d.
@@ -187,7 +167,7 @@ Per `superpowers:receiving-code-review`:
 
 **Track each item by a stable fingerprint** (used by 2g bail check):
 - Review-thread comment: `(file, line, comment_id)`.
-- Issue-comment finding (qodo): `(file, line, normalized first ~60 chars of finding text)`.
+- Codex review-body finding: `(file, line, normalized first ~60 chars of finding text)`.
 - Check failure: `(check_name, first non-empty error line)`.
 
 ### 2e. Resolve merge conflicts (if any)
@@ -316,7 +296,7 @@ gh pr merge "$PR" --squash --delete-branch
 Print one-line summary and prompt:
 ```
 PR #$PR is clean.
-• qodo ✓ on $HEAD_SHA
+• codex ✓ on $HEAD_SHA
 • <N> checks green
 • <M> comments resolved (<F> fixed, <S> skipped with reasoning)
 • Last commit: <abbrev SHA> "<msg>"
