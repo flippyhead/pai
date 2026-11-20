@@ -44,6 +44,14 @@ Cowork and claude.ai read. Per-repo rules stay in each repo's AGENTS.md.
 
 If Cowork stops listing **peter**, re-sync the pai marketplace.
 
+## Skill setup
+
+- gstack lives only in `~/Development/planning` (product and startup planning).
+  `tools/gstack-planning.sh` moves its skills there and archives the rest;
+  re-run it after `/gstack-upgrade`.
+- Ponytail's always-on mode is off (`~/.config/ponytail/config.json`,
+  `defaultMode: off`). Use `/ponytail-review` on demand.
+
 ## Add a skill
 
 Say "skillify this" / "add a skill that …" — the `add-skill` skill does the rest.
