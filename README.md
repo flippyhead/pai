@@ -1,6 +1,6 @@
 # pai
 
-Source of truth for Peter's personal skills. One marketplace, one plugin.
+Source of truth for Peter's personal skills and global agent instructions. One marketplace, one plugin.
 
 ```
 .claude-plugin/marketplace.json   marketplace "pai"
@@ -8,6 +8,7 @@ plugins/peter/
   .claude-plugin/plugin.json      plugin "peter"
   skills/<slug>/SKILL.md          one dir per skill
 RESOLVER.md                       trigger phrase -> skill
+instructions/                     global agent instructions (see below)
 tools/dashboard/                  local "In flight" page: node tools/dashboard/server.ts
 ```
 
@@ -30,6 +31,18 @@ repo anonymously, which is why the repo is public: a private repo fails with
 sync is Team/Enterprise only.
 
 Don't also enable the same skills as claude.ai account skills — the names collide.
+
+## Global instructions
+
+`instructions/` holds the rules every agent follows, split by context:
+`global.md` (everywhere), `coding.md` (code tools), `assistant.md` (Cowork).
+Edit a part, then run `bash instructions/install.sh`. It writes
+`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md` and `~/.gemini/GEMINI.md`
+(global + coding) and copies global + assistant to the clipboard: paste it
+into claude.ai **Settings → Profile → personal preferences**, which is what
+Cowork and claude.ai read. Per-repo rules stay in each repo's AGENTS.md.
+
+If Cowork stops listing **peter**, re-sync the pai marketplace.
 
 ## Add a skill
 

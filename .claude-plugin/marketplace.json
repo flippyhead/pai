@@ -14,7 +14,8 @@
       "author": {
         "name": "Peter Brown"
       },
-      "source": "./plugins/peter"
+      "source": "./plugins/peter",
+      "category": "productivity"
     }
   ]
 }
