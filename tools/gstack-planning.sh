@@ -24,6 +24,9 @@ for d in ~/.claude/skills/*/; do
   fi
 done
 
+# Hide the gstack router skill from global sessions (no planning skill uses it; /gstack-upgrade restores it).
+[ -f "$GSTACK/SKILL.md" ] && mv "$GSTACK/SKILL.md" "$GSTACK/SKILL.md.off" && echo "hid global gstack router"
+
 # Codex: the ~/.agents/skills gstack copy points at a bin path that doesn't exist; archive it.
 for name in gstack _gstack-command; do
   [ -e ~/.agents/skills/$name ] && { rm -rf "$ARCHIVE/agents/$name"; mv ~/.agents/skills/$name "$ARCHIVE/agents/$name"; echo "archived codex: $name"; }
