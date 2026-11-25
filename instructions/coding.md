@@ -32,5 +32,10 @@
 - Set Vercel env values with `printf`, never `echo` (echo stores a trailing newline).
 - Browser work uses Claude in Chrome (it has my sign-ins). Sites signed in as a real user (for example Foster prod as Ashley) are read-only.
 
+## Secrets
+- Cross-project operator API keys (Porkbun, Resend, GitHub, etc.) live in `fnox` (`~/.config/fnox/config.toml`, age-encrypted and synced via iCloud Drive).
+- Check `fnox list` before asking for a key or searching disk. Run commands with `fnox exec --only <KEYS> -- <cmd>` and never print secret values to stdout or chat.
+- If a reusable operator key is missing, ask via `request_secret` (`delivery: "file"`), immediately save it with `fnox set --global <KEY> < "$file"`, then use `fnox exec`.
+
 ## Project instructions
 - Each repo's AGENTS.md is its source of truth, and CLAUDE.md contains only `@AGENTS.md`. Keep it short: commands, verify, non-obvious gotchas, review rules.
